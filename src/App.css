@@ -1,0 +1,43 @@
+.app-shell {
+  min-height: 100vh;
+  background: #f4f6f9;
+}
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 24px;
+  background: #1f3a56;
+  color: #fff;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.app-header nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.app-header a {
+  color: #dbeafe;
+  text-decoration: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+
+.app-header a.active {
+  background: #2563eb;
+  color: #fff;
+}
+
+.app-main {
+  max-width: 900px;
+  margin: 24px auto;
+  padding: 0 16px 24px;
+}
