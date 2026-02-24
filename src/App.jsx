@@ -10,7 +10,7 @@ import { api } from './api'
 import './App.css'
 
 function App() {
-  const routerBase = import.meta.env.DEV ? '/' : '/app'
+  const routerBase = import.meta.env.VITE_ROUTER_BASENAME || '/'
   const [user, setUser] = useState(null)
   const [loadingUser, setLoadingUser] = useState(true)
 

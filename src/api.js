@@ -9,8 +9,6 @@ const getCookie = (name) => {
 
 let csrfLoaded = false
 const configuredBase = (import.meta.env.VITE_API_BASE || '').replace(/\/$/, '')
-const runtimeHost = typeof window !== 'undefined' ? window.location.hostname : ''
-const runtimeBase = runtimeHost ? `http://${runtimeHost}:8000` : ''
 let activeBase = ''
 
 const uniqueBases = (bases) => {
@@ -32,7 +30,6 @@ const getApiBases = () => {
   }
   return uniqueBases([
     activeBase,
-    runtimeBase,
     'http://localhost:8000',
     'http://127.0.0.1:8000',
     '',
