@@ -102,6 +102,10 @@ function Register() {
       setSuccess('Registration successful. Redirecting to login...')
       setTimeout(() => navigate('/login'), 600)
     } catch (requestError) {
+      const apiErrors = requestError?.data?.errors
+      if (apiErrors && typeof apiErrors === 'object') {
+        setErrors((prev) => ({ ...prev, ...apiErrors }))
+      }
       setError(requestError.message || 'Registration failed. Please try again.')
     } finally {
       setLoading(false)

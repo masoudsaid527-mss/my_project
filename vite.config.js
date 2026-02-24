@@ -17,14 +17,9 @@ export default defineConfig(({ command }) => ({
     emptyOutDir: true,
     rollupOptions: {
       output: {
-        entryFileNames: 'app.js',
-        chunkFileNames: 'chunks/[name].js',
-        assetFileNames: (assetInfo) => {
-          if (assetInfo.name && assetInfo.name.endsWith('.css')) {
-            return 'app.css'
-          }
-          return 'assets/[name][extname]'
-        },
+        entryFileNames: 'app-[hash].js',
+        chunkFileNames: 'chunks/[name]-[hash].js',
+        assetFileNames: 'assets/[name]-[hash][extname]',
       },
     },
   },

@@ -20,8 +20,8 @@ function Dashboard({ user, onLogout }) {
       <p><strong>User:</strong> {user.username}</p>
       <p><strong>Role:</strong> {user.role || 'Not assigned'}</p>
       <div className="link-row">
-        {user.role === 'student' && <button onClick={() => navigate('/student/bookings')}>Book Hostel</button>}
-        {user.role === 'hostel_owner' && <button onClick={() => navigate('/owner/rooms')}>Manage Rooms</button>}
+        {user.role === 'student' && <button onClick={() => navigate('/student/bookings')}>Booking</button>}
+        {user.role === 'hostel_owner' && <button onClick={() => navigate('/owner/rooms')}>Post Room</button>}
         <button onClick={handleLogout}>Logout</button>
       </div>
     </section>

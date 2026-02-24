@@ -1,15 +1,15 @@
 import { Link } from 'react-router-dom'
 import './pages.css'
 
-function Home() {
+function Home({ user }) {
   return (
     <section className="page-card">
       <h2>Welcome to Hostel Management System</h2>
-      <p>Use the links below to get started.</p>
+      <p>Simple hostel workflow based on your role.</p>
       <div className="link-row">
-        <Link to="/login">Login</Link>
-        <Link to="/register">Register</Link>
-        <Link to="/about">About</Link>
+        {user && <Link to="/dashboard">Dashboard</Link>}
+        {!user && <Link to="/login">Login</Link>}
+        {!user && <Link to="/register">Register</Link>}
       </div>
     </section>
   )

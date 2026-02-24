@@ -13,11 +13,16 @@ function StudentBookings() {
   const loadData = async () => {
     try {
       const data = await api.get('/api/student/bookings/')
+      const bookedRoomIds = new Set((data.bookings || []).map((booking) => booking.room_id))
+      const availableHostels = (data.hostels || []).filter((hostel) => !bookedRoomIds.has(hostel.id))
+
       setStudent(data.student)
-      setHostels(data.hostels)
+      setHostels(availableHostels)
       setBookings(data.bookings)
-      if (data.hostels.length > 0) {
-        setHostelId(String(data.hostels[0].id))
+      if (availableHostels.length > 0) {
+        setHostelId(String(availableHostels[0].id))
+      } else {
+        setHostelId('')
       }
     } catch (requestError) {
       setError(requestError.message)
@@ -55,14 +60,14 @@ function StudentBookings() {
       {message && <div className="success-message">{message}</div>}
 
       <form onSubmit={handleSubmit} className="booking-form">
-        <select value={hostelId} onChange={(event) => setHostelId(event.target.value)}>
+        <select value={hostelId} onChange={(event) => setHostelId(event.target.value)} disabled={hostels.length === 0}>
           {hostels.map((hostel) => (
             <option key={hostel.id} value={hostel.id}>
               {hostel.name} (Owner: {hostel.owner_name})
             </option>
           ))}
         </select>
-        <button type="submit">Book now</button>
+        <button type="submit" disabled={hostels.length === 0}>Book now</button>
       </form>
 
       <h3>Your bookings</h3>

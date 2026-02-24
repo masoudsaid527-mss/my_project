@@ -1,6 +1,5 @@
 import { BrowserRouter, Navigate, NavLink, Route, Routes } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import About from './components/about'
 import Home from './components/home'
 import Login from './components/login'
 import Register from './components/register'
@@ -49,16 +48,14 @@ function App() {
           <h1>Hostel Management</h1>
           <nav>
             <NavLink to="/">Home</NavLink>
-            <NavLink to="/about">About</NavLink>
+            {user && <NavLink to="/dashboard">Dashboard</NavLink>}
             {!user && <NavLink to="/login">Login</NavLink>}
             {!user && <NavLink to="/register">Register</NavLink>}
-            {user && <NavLink to="/dashboard">Dashboard</NavLink>}
           </nav>
         </header>
         <main className="app-main">
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
+            <Route path="/" element={<Home user={user} />} />
             <Route path="/login" element={user ? <Navigate to="/dashboard" replace /> : <Login onLogin={setUser} />} />
             <Route path="/register" element={user ? <Navigate to="/dashboard" replace /> : <Register />} />
             <Route path="/dashboard" element={user ? <Dashboard user={user} onLogout={() => setUser(null)} /> : <Navigate to="/login" replace />} />
