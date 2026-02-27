@@ -1,8 +1,12 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-export default defineConfig(({ command }) => {
-  const staticDeploy = false // change to true if needed
+export default defineConfig(({ command, mode }) => {
+  // Build for Render static hosting when running on Render or static mode.
+  const staticDeploy =
+    process.env.RENDER === 'true' ||
+    process.env.VITE_STATIC_DEPLOY === 'true' ||
+    mode === 'static'
 
   return {
     plugins: [react()],
