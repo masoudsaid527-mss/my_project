@@ -1,16 +1,17 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-export default defineConfig({
-  plugins: [react()],
-  build: {
-    outDir: 'dist'
-  }
-})
+export default defineConfig(({ command }) => {
+  const staticDeploy = false // change to true if needed
 
   return {
     plugins: [react()],
-    base: command === 'serve' || staticDeploy ? '/' : '/static/react/',
+
+    base:
+      command === 'serve' || staticDeploy
+        ? '/'
+        : '/static/react/',
+
     server: {
       proxy: {
         '/api': {
@@ -19,6 +20,7 @@ export default defineConfig({
         },
       },
     },
+
     build: {
       outDir: staticDeploy ? 'dist' : '../../../static/react',
       emptyOutDir: true,
@@ -31,4 +33,4 @@ export default defineConfig({
       },
     },
   }
-
+})
