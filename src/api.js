@@ -9,13 +9,22 @@ const getCookie = (name) => {
 
 let csrfLoaded = false
 
-// ✅ Backend URL yako ya Render
-const BASE_URL = 'https://masoud-project-64gt.onrender.com'
+const normalizeBaseUrl = (url) => (url || '').trim().replace(/\/+$/, '')
+
+const BASE_URL = normalizeBaseUrl(
+  import.meta.env.VITE_API_BASE_URL ||
+    import.meta.env.VITE_API_BASE_URL_DEPLOY,
+)
 
 const buildUrl = (url) => {
-  if (url.startsWith('/')) {
-    return `${BASE_URL}${url}`
+  if (/^https?:\/\//i.test(url)) {
+    return url
   }
+
+  if (url.startsWith('/')) {
+    return BASE_URL ? `${BASE_URL}${url}` : url
+  }
+
   return url
 }
 

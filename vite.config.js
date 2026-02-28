@@ -4,9 +4,10 @@ import react from '@vitejs/plugin-react'
 // https://vitejs.dev/config/ for all options
 
 export default defineConfig(({ command, mode }) => {
-  // Build for Render static hosting when running on Render or static mode.
+  // Build for standalone static hosting when running on Render, Vercel, or static mode.
   const staticDeploy =
     process.env.RENDER === 'true' ||
+    process.env.VERCEL === '1' ||
     process.env.VITE_STATIC_DEPLOY === 'true' ||
     mode === 'static'
 
