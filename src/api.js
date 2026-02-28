@@ -1,13 +1,5 @@
-const getCookie = (name) => {
-  const value = `; ${document.cookie}`
-  const parts = value.split(`; ${name}=`)
-  if (parts.length === 2) {
-    return parts.pop().split(';').shift()
-  }
-  return ''
-}
-
 let csrfLoaded = false
+let csrfToken = ''
 
 const normalizeBaseUrl = (url) => (url || '').trim().replace(/\/+$/, '')
 
@@ -32,15 +24,21 @@ const buildUrl = (url) => {
 }
 
 const ensureCsrfCookie = async () => {
-  if (getCookie('csrftoken')) return
+  if (csrfToken) return
   if (csrfLoaded) return
 
   csrfLoaded = true
 
-  await fetch(buildUrl('/api/csrf/'), {
+  const response = await fetch(buildUrl('/api/csrf/'), {
     method: 'GET',
     credentials: 'include',
   })
+
+  const contentType = response.headers.get('content-type') || ''
+  if (response.ok && contentType.includes('application/json')) {
+    const data = await response.json()
+    csrfToken = data?.csrfToken || ''
+  }
 }
 
 const request = async (url, options = {}) => {
@@ -56,9 +54,8 @@ const request = async (url, options = {}) => {
 
   if (method !== 'GET') {
     await ensureCsrfCookie()
-    const token = getCookie('csrftoken')
-    if (token) {
-      headers['X-CSRFToken'] = token
+    if (csrfToken) {
+      headers['X-CSRFToken'] = csrfToken
     }
   }
 
