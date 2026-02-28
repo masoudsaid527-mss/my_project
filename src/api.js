@@ -71,7 +71,12 @@ const request = async (url, options = {}) => {
     : null
 
   if (!response.ok) {
-    throw new Error(`Request failed (${response.status})`)
+    const error = new Error(
+      data?.message || `Request failed (${response.status})`,
+    )
+    error.status = response.status
+    error.data = data
+    throw error
   }
 
   return data || {}
