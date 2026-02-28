@@ -11,9 +11,12 @@ let csrfLoaded = false
 
 const normalizeBaseUrl = (url) => (url || '').trim().replace(/\/+$/, '')
 
+const DEFAULT_API_BASE_URL = 'https://masoud-project-64gt.onrender.com'
+
 const BASE_URL = normalizeBaseUrl(
   import.meta.env.VITE_API_BASE_URL ||
-    import.meta.env.VITE_API_BASE_URL_DEPLOY,
+    import.meta.env.VITE_API_BASE_URL_DEPLOY ||
+    DEFAULT_API_BASE_URL,
 )
 
 const buildUrl = (url) => {
