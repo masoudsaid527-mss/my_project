@@ -5,11 +5,12 @@ const normalizeBaseUrl = (url) => (url || '').trim().replace(/\/+$/, '')
 
 const DEFAULT_API_BASE_URL = 'https://masoud-project-64gt.onrender.com'
 
-const BASE_URL = normalizeBaseUrl(
+const ENV_API_BASE_URL = normalizeBaseUrl(
   import.meta.env.VITE_API_BASE_URL ||
-    import.meta.env.VITE_API_BASE_URL_DEPLOY ||
-    DEFAULT_API_BASE_URL,
+    import.meta.env.VITE_API_BASE_URL_DEPLOY,
 )
+
+const BASE_URL = ENV_API_BASE_URL || DEFAULT_API_BASE_URL
 
 const buildUrl = (url) => {
   if (/^https?:\/\//i.test(url)) {
@@ -29,15 +30,19 @@ const ensureCsrfCookie = async () => {
 
   csrfLoaded = true
 
-  const response = await fetch(buildUrl('/api/csrf/'), {
-    method: 'GET',
-    credentials: 'include',
-  })
+  try {
+    const response = await fetch(buildUrl('/api/csrf/'), {
+      method: 'GET',
+      credentials: 'include',
+    })
 
-  const contentType = response.headers.get('content-type') || ''
-  if (response.ok && contentType.includes('application/json')) {
-    const data = await response.json()
-    csrfToken = data?.csrfToken || ''
+    const contentType = response.headers.get('content-type') || ''
+    if (response.ok && contentType.includes('application/json')) {
+      const data = await response.json()
+      csrfToken = data?.csrfToken || ''
+    }
+  } catch {
+    csrfLoaded = false
   }
 }
 
