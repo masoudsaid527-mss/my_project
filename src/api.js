@@ -3,14 +3,24 @@ let csrfToken = ''
 
 const normalizeBaseUrl = (url) => (url || '').trim().replace(/\/+$/, '')
 
-const DEFAULT_API_BASE_URL = 'https://masoud-project-64gt.onrender.com'
+const DEFAULT_DEPLOY_API_BASE_URL = 'https://masoud-project-64gt.onrender.com'
+const DEFAULT_LOCAL_API_BASE_URL =
+  typeof window !== 'undefined'
+    ? `http://${window.location.hostname}:8000`
+    : 'http://127.0.0.1:8000'
 
 const ENV_API_BASE_URL = normalizeBaseUrl(
   import.meta.env.VITE_API_BASE_URL ||
     import.meta.env.VITE_API_BASE_URL_DEPLOY,
 )
 
-const BASE_URL = ENV_API_BASE_URL || DEFAULT_API_BASE_URL
+const IS_LOCAL_UI =
+  typeof window !== 'undefined' &&
+  ['localhost', '127.0.0.1'].includes(window.location.hostname)
+
+const BASE_URL =
+  ENV_API_BASE_URL ||
+  (IS_LOCAL_UI ? DEFAULT_LOCAL_API_BASE_URL : DEFAULT_DEPLOY_API_BASE_URL)
 
 const buildUrl = (url) => {
   if (/^https?:\/\//i.test(url)) {

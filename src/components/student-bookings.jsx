@@ -4,6 +4,7 @@ import './pages.css'
 
 function StudentBookings() {
   const [student, setStudent] = useState(null)
+  const [canBook, setCanBook] = useState(true)
   const [hostels, setHostels] = useState([])
   const [bookings, setBookings] = useState([])
   const [hostelId, setHostelId] = useState('')
@@ -17,9 +18,10 @@ function StudentBookings() {
       const availableHostels = (data.hostels || []).filter((hostel) => !bookedRoomIds.has(hostel.id))
 
       setStudent(data.student)
+      setCanBook(Boolean(data.can_book))
       setHostels(availableHostels)
       setBookings(data.bookings)
-      if (availableHostels.length > 0) {
+      if (Boolean(data.can_book) && availableHostels.length > 0) {
         setHostelId(String(availableHostels[0].id))
       } else {
         setHostelId('')
@@ -58,16 +60,21 @@ function StudentBookings() {
       {student && <p><strong>Student:</strong> {student.name}</p>}
       {error && <div className="error-message">{error}</div>}
       {message && <div className="success-message">{message}</div>}
+      {!canBook && (
+        <div className="success-message">
+          You already have an active booking. You cannot book another room.
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="booking-form">
-        <select value={hostelId} onChange={(event) => setHostelId(event.target.value)} disabled={hostels.length === 0}>
+        <select value={hostelId} onChange={(event) => setHostelId(event.target.value)} disabled={!canBook || hostels.length === 0}>
           {hostels.map((hostel) => (
             <option key={hostel.id} value={hostel.id}>
               {hostel.name} (Owner: {hostel.owner_name})
             </option>
           ))}
         </select>
-        <button type="submit" disabled={hostels.length === 0}>Book now</button>
+        <button type="submit" disabled={!canBook || hostels.length === 0}>Book now</button>
       </form>
 
       <h3>Your bookings</h3>
