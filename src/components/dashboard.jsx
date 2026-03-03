@@ -9,6 +9,7 @@ function Dashboard({ user, onLogout }) {
     try {
       await api.post('/api/logout/', {})
     } finally {
+      api.clearAuthToken()
       onLogout()
       navigate('/login')
     }

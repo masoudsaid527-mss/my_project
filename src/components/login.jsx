@@ -51,6 +51,9 @@ function Login({ onLogin }) {
         password: formData.password,
       })
 
+      if (data.access_token) {
+        api.setAuthToken(data.access_token)
+      }
       onLogin(data)
       setSuccess('Login successful. Redirecting...')
       setFormData({ username: '', password: '' })
